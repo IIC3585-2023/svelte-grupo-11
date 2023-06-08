@@ -24,6 +24,8 @@
     })
 </script>
 
+<!-- TODO: Cambiar esto pa que haga display al titulo correcto segun el paso, y quiza poner algo
+asi como step 1, step 2, step 3, etc. y poner botones pa volver al step anterior-->
 <div class="hero">
     <div class="hero-body">
         <div class="container has-text-centered">

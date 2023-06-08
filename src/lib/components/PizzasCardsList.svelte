@@ -23,7 +23,6 @@
                 imgUrl: pizza.image_url,
             }
         })
-        pizzas = [...pizzas, ...pizzas, ...pizzas, ...pizzas]
         loading = false;
     });
 </script>
