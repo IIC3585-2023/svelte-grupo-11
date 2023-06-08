@@ -1,5 +1,5 @@
 <script>
-    import SampleComp from "../lib/components/SampleComp.svelte";
+    import SampleComp from "$lib/components/SampleComp.svelte";
 </script>
 
 <h1>Welcome to SvelteKit</h1>

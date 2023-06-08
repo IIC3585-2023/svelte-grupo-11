@@ -10,7 +10,7 @@
     $: menuActive = burgerToggle ? 'is-active' : '';
 </script>
 
-<nav class="navbar" aria-label="main navigation">
+<nav class="navbar is-warning" aria-label="main navigation">
     <div class="navbar-brand">
         <a class="navbar-item" id='PizzaLogo' href="/">
             <img src={PizzaIcon} alt='bulma_icon' width="32" height="32">
@@ -62,10 +62,10 @@
         <div class="navbar-end">
         <div class="navbar-item">
             <div class="buttons">
-            <a href="/signup" class="button is-warning">
+            <a href="/signup" class="button is-warning is-dark">
                 <strong>Sign up</strong>
             </a>
-            <a href="/login" class="button is-light">
+            <a href="/login" class="button is-warning">
                 Log in
             </a>
             </div>
