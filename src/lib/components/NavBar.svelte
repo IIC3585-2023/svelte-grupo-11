@@ -12,8 +12,8 @@
 
 <nav class="navbar" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-            <img src={PizzaIcon} alt='bulma_icon' width="28" height="28">
+        <a class="navbar-item" id='PizzaLogo' href="/">
+            <img src={PizzaIcon} alt='bulma_icon' width="32" height="32">
         </a>
         <a class="navbar-item" id='PizzaSplit' href="/">
             PizzaSplit
@@ -28,11 +28,11 @@
 
     <div id="navbarBasicExample" class="navbar-menu {menuActive}">
         <div class="navbar-start">
-        <a href="buy_pizza" class="navbar-item">
+        <a href="/buy_pizza" class="navbar-item">
             Pedir una Pizza
         </a>
 
-        <a href="current_pizzas" class="navbar-item">
+        <a href="/current_pizzas" class="navbar-item">
             Pizzas actuales
         </a>
 
@@ -62,7 +62,7 @@
         <div class="navbar-end">
         <div class="navbar-item">
             <div class="buttons">
-            <a href="signup" class="button is-warning">
+            <a href="/signup" class="button is-warning">
                 <strong>Sign up</strong>
             </a>
             <a href="/login" class="button is-light">
@@ -89,5 +89,9 @@
     }
     #PizzaSplit:hover {
         color: black;
+    }
+
+    #PizzaLogo {
+        padding-right: 6px;
     }
 </style>
