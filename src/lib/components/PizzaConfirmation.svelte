@@ -1,7 +1,9 @@
 <script>
     import { chosenPizzeria } from '$lib/stores/pizzeriaStore.js'
     import { chosenPizza } from '$lib/stores/pizzaStore.js'
+    import { sessionStore } from '../stores/sessionStore';
     import { API_URL } from "$lib/global.js";
+    import { goto } from "$app/navigation";
 
     const pizzeria = $chosenPizzeria
     const pizza = $chosenPizza
@@ -25,7 +27,7 @@
         formErrors = false;
     }
 
-    const buyPizza = () => {
+    const buyPizza = async () => {
         console.log('Bought Pizza');
         console.log(`Slices: ${slices}`);
         console.log(`chosenDate: ${chosenDate}:00-04`);
@@ -44,18 +46,24 @@
             return;
         }
 
-        // const postResponse = fetch(`${API_URL}/purchase`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify({
-        //         totalSlices: 8,
-        //         boughtSlices: slices,
-        //         targetDate: chosenDate,
-        //         pizzaID: pizza.id
-        //     })
-        // })
+        const postResponse = await fetch(`${API_URL}/purchases`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${$sessionStore.jwt}`,
+            },
+            body: JSON.stringify({
+                totalSlices: 8,
+                boughtSlices: slices,
+                date: chosenDate,
+                pizza_id: pizza.id
+            })
+        });
+        if (postResponse.status === 200) {
+            //TODO: Quiza redireccionar a todas las ordenes puestas, o las
+            // del usuario
+            goto('/');
+        };
     };
 </script>
 
