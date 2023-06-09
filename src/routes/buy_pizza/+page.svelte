@@ -1,26 +1,32 @@
 <script>
     import PizzeriasCardsList from '$lib/components/PizzeriasCardsList.svelte';
-    import PizzasCardList from '$lib/components/PizzasCardsList.svelte'
+    import PizzasCardList from '$lib/components/PizzasCardsList.svelte';
+    import PizzaConfirmation from '$lib/components/PizzaConfirmation.svelte';
 
-    import { chosenPizzeriaId } from '$lib/stores/pizzeriaStore.js'
-    import { chosenPizzaId } from '$lib/stores/pizzaStore.js'
+    import { chosenPizzeria } from '$lib/stores/pizzeriaStore.js'
+    import { chosenPizza } from '$lib/stores/pizzaStore.js'
     import { onDestroy } from "svelte";
-    import { get } from 'svelte/store';
 
     let pizzeriaChosen = false;
     let pizzaChosen = false;
 
-    chosenPizzeriaId.subscribe( (value) => {
-        pizzeriaChosen = value < 0 ? false : true;
+    chosenPizzeria.subscribe( (value) => {
+        pizzeriaChosen = value.id < 0 ? false : true;
     });
 
-    chosenPizzaId.subscribe( (value) => {
-        pizzaChosen = value < 0 ? false : true;
+    chosenPizza.subscribe( (value) => {
+        pizzaChosen = value.id < 0 ? false : true;
     })
 
     onDestroy( () => {
-        chosenPizzeriaId.update((n) => -1);
-        chosenPizzaId.update((n) => -1);
+        chosenPizzeria.update( previous => {
+            previous.id = -1;
+            return previous;
+        });
+        chosenPizza.update( previous => {
+            previous.id = -1;
+            return previous;
+        });
     })
 </script>
 
@@ -39,9 +45,7 @@ asi como step 1, step 2, step 3, etc. y poner botones pa volver al step anterior
 {:else if !pizzaChosen}
     <PizzasCardList/>
 {:else}
-    <h1>Elegidas pizzas y pizzerias</h1>
-    <p>Pizzeria ID: {get(chosenPizzeriaId)}</p>
-    <p>Pizza ID: {get(chosenPizzaId)}</p>
+    <PizzaConfirmation/>
 {/if}
 
 

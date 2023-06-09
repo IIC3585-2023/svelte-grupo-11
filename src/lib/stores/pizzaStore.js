@@ -1,3 +1,10 @@
 import { writable } from "svelte/store";
 
-export const chosenPizzaId = writable(-1);
+export const chosenPizza = writable({
+    id: -1,
+    name: '',
+    description: '',
+    cost: '',
+    calsPerSlice: '',
+    imgUrl: '',
+});

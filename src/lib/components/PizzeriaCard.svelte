@@ -1,5 +1,5 @@
 <script>
-    import { chosenPizzeriaId } from '$lib/stores/pizzeriaStore.js'
+    import { chosenPizzeria } from '$lib/stores/pizzeriaStore.js'
 
     export let id;
     export let name;
@@ -11,8 +11,17 @@
 
     const choosePizzeria = () => {
         console.log(`Chose pizzeria ${name} (ID: ${id})!`)
-        chosenPizzeriaId.update( n => id)
-
+        chosenPizzeria.update( previous => {
+            return {
+                id,
+                name,
+                area,
+                address,
+                openingHours,
+                closingHours,
+                imgUrl,
+            }
+        })
     }
 
 </script>

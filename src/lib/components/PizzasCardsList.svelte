@@ -1,11 +1,10 @@
 <script>
     import PizzaCard from "./PizzaCard.svelte";
-    import { chosenPizzeriaId } from '$lib/stores/pizzeriaStore.js'
-    import { get } from 'svelte/store'
+    import { chosenPizzeria } from '$lib/stores/pizzeriaStore.js'
     import { API_URL } from "$lib/global.js";
     import { onMount } from "svelte";
 
-    let pizzeriaId = get(chosenPizzeriaId);
+    let pizzeriaId = $chosenPizzeria.id;
     let loading = true;
     let pizzas = []
 
