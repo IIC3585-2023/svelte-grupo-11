@@ -28,7 +28,7 @@
 <div class="card" on:click={choosePizza}>
     <div class="card-image">
         <figure class="image is-2by1">
-            <img src={imgUrl} alt="Pizzas">
+            <img src={imgUrl} alt="Pizzas" id='PizzaImg'>
         </figure>
     </div>
     <div class="card-content">
@@ -61,5 +61,9 @@
 
     .card:hover {
         transform: scale(1.1)
+    }
+
+    #PizzaImg {
+        object-fit: cover;
     }
 </style>

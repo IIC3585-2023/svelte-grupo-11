@@ -69,13 +69,23 @@
 
 <div class='container is-max-desktop' id='FormContainer'>
     <div class='box is-flex is-flex-direction-column'>
-        <div class='content'>
-            <p class='title'>{pizzeria.name}</p>
-            <p class='subtitle'>{pizzeria.address}</p>
-            <h2>Pizza {pizza.name} - {new Intl.NumberFormat('es-cl', { style: 'currency', currency: 'CLP' }).format(pizza.cost)}</h2>
-            <p class='subtitle'>{pizza.description}</p>
-            <p class='subtitle'>Calorias por pedazo: {pizza.calsPerSlice}</p>
+        <div class='columns is-vcentered'>
+            <div class='column is-three-fifths'>
+                <div class='content'>
+                    <p class='title'>{pizzeria.name}</p>
+                    <p class='subtitle'>{pizzeria.address}</p>
+                    <h2>Pizza {pizza.name} - {new Intl.NumberFormat('es-cl', { style: 'currency', currency: 'CLP' }).format(pizza.cost)}</h2>
+                    <p class='subtitle'>{pizza.description}</p>
+                    <p class='subtitle'>Calorias por pedazo: {pizza.calsPerSlice}</p>
+                </div>
+            </div>
+            <div class='column is-two-fifths' id='PizzaImgContainer'>
+                <figure class="image">
+                    <img src={pizza.imgUrl} alt="Pizzas" id='PizzaImg'>
+                </figure>
+            </div>
         </div>
+        
         <div class='field'>
             <label for='DatetimeInput' class='label'>Elige tu hora</label>
             <div class='control'>
@@ -112,4 +122,10 @@
             margin-left: 10px;
         }
     }
+
+    #PizzaImg {
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
 </style>

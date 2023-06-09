@@ -10,12 +10,24 @@
     let pizzeriaChosen = false;
     let pizzaChosen = false;
 
+    let step = 0;
+
+    let headerMessages = ['Elige tu Pizzeria', 'Elige tu Pizza', 'Termina tu pedido'];
+
+    $: headerMessage = headerMessages[step];
+
     chosenPizzeria.subscribe( (value) => {
         pizzeriaChosen = value.id < 0 ? false : true;
+        if (pizzeriaChosen) {
+            step = 1;
+        }
     });
 
     chosenPizza.subscribe( (value) => {
         pizzaChosen = value.id < 0 ? false : true;
+        if (pizzaChosen) {
+            step = 2;
+        }
     })
 
     onDestroy( () => {
@@ -30,25 +42,31 @@
     })
 </script>
 
-<!-- TODO: Cambiar esto pa que haga display al titulo correcto segun el paso, y quiza poner algo
-asi como step 1, step 2, step 3, etc. y poner botones pa volver al step anterior-->
 <div class="hero">
     <div class="hero-body">
         <div class="container has-text-centered">
-            <p class="title" id='HeroTitle'>Elige tu Pizzeria</p>
+            <p class="title" id='HeroTitle'>{ headerMessage }</p>
         </div>
     </div>
 </div>
 
-{#if !pizzeriaChosen}
+{#if step === 0}
     <PizzeriasCardsList/>
-{:else if !pizzaChosen}
+{:else if step === 1}
     <PizzasCardList/>
-{:else}
+{:else if step === 2}
     <PizzaConfirmation/>
 {/if}
 
-
+{#if step > 0}
+    <div class="hero">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <button class="button is-warning" on:click={() => step -= 1}>Volver</button>
+            </div>
+        </div>
+    </div>
+{/if}
 
 <style>
     /* @font-face {
