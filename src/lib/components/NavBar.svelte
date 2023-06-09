@@ -1,5 +1,6 @@
 <script>
     import PizzaIcon from '$lib/assets/pizza.png'
+    import {sessionStore} from '../stores/sessionStore';
 
     let burgerToggle = false
 
@@ -8,6 +9,15 @@
     }
 
     $: menuActive = burgerToggle ? 'is-active' : '';
+
+    const signout = () => {
+        sessionStore.update((previous) => {
+        previous.loggedIn = false;
+        previous.jwt = '';
+        previous.user = '';
+        return previous;
+    })};
+
 </script>
 
 <nav class="navbar is-warning" aria-label="main navigation">
@@ -58,7 +68,7 @@
             </div>
         </div> -->
         </div>
-
+        {#if !$sessionStore.loggedIn}
         <div class="navbar-end">
         <div class="navbar-item">
             <div class="buttons">
@@ -71,6 +81,20 @@
             </div>
         </div>
         </div>
+        {:else}
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                    <a href="#top" class="button is-warning">
+                        <strong>{$sessionStore.user.firstName +' ' +  $sessionStore.user.lastName}</strong>
+                    </a>
+                    <a href="#top" on:click={signout} class="button is-light">
+                        Sign out
+                    </a>
+                    </div>
+                </div>
+            </div>
+        {/if}
     </div>
 </nav>
 

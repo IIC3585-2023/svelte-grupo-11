@@ -1,1 +1,1 @@
-export const API_URL = "https://backend-svelte.onrender.com"
+export const API_URL = 'https://backend-svelte.onrender.com';
