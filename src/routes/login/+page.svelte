@@ -92,7 +92,7 @@ const submitForm = async () => {
                 <button class="button is-warning is-fullwidth {loadingButton ? 'is-loading' : ''}" type="submit" on:click={submitForm} disabled={!validated}>Login</button>
             </div>
             <div class="has-text-centered">
-                <p class="is-size-7"> Don't have an account? <a href="/signup" class="has-text-primary">Login</a>
+                <p class="is-size-7"> Don't have an account? <a href="/signup" class="has-text-primary">Signup</a>
                 </p>
             </div>
         </div>
