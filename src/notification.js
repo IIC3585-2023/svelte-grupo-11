@@ -1,5 +1,9 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import {sessionStore} from '../src/lib/stores/sessionStore';
+import {notificationStore} from '../src/lib/stores/notificationStore';
+import {API_URL} from './lib/global'
+import { get } from "svelte/store";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAsB0DMwabAeZFJ-xrYMhBxX9N0kkE2rTk",
@@ -9,6 +13,34 @@ const firebaseConfig = {
   messagingSenderId: "264995596761",
   appId: "1:264995596761:web:5e9777f5f5ede75ad191c8"
 };
+
+const notificationToken = {
+  retrieved: false,
+  token: ''
+}
+
+const saveToken = async (jwt) => {
+  if(!notificationToken.retrieved) return;
+  console.log('saving token')
+  const res = await fetch(API_URL + '/set_notification_token', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${jwt}`
+      },
+      body: JSON.stringify({
+        notificationToken: notificationToken.token
+      })
+  });
+
+  console.log(res);
+}
+
+sessionStore.subscribe((value) => {
+  if(!value.loggedIn) return;
+  saveToken(value.jwt);
+})
+
 
 if ("serviceWorker" in navigator) {
   // Register a service worker hosted at the root of the
@@ -25,9 +57,14 @@ if ("serviceWorker" in navigator) {
             serviceWorkerRegistration: registration,
             vapidKey: 'BKJK0j7GfFOjFkfcI8CSmuu5YEc2OfpWFgIaLKHpMTmrfDXC8xlIaCu55-PWCYY_3niWhmFo8l2Pa0ZRSXHWhbk'
         });
-        console.log(token)
+        console.log('token', token)
+        notificationToken.retrieved = true;
+        notificationToken.token = token;
+
         onMessage(messaging, (payload) => {
-          console.log("mensaje recibido", payload)
+          const notificationRef = get(notificationStore); 
+          notificationRef.showNotification = true;
+          notificationStore.set(notificationRef);
         })
         return token;
       };
