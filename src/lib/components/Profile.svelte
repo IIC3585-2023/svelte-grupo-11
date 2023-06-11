@@ -2,14 +2,13 @@
     import {sessionStore} from '../stores/sessionStore'
     import { API_URL } from '../global';
     import { onMount } from "svelte";
+    import { goto } from '$app/navigation';
 
     let userPurchases = [];
 
     let loading = true;
 
     onMount(async () => {
-        // TODO CHECK IF LOGGED IN
-
         const URL = API_URL + `/purchases/my_purchases`;
         const token = $sessionStore.jwt;
 
@@ -21,7 +20,7 @@
         });
 
         if(resMyPurchases.status != 200){
-            throw redirect(401, '/');
+            goto('/');
         }
 
         userPurchases = (await resMyPurchases.json()).purchases;
@@ -29,8 +28,8 @@
         loading = false;
     });
 
-    const choosePurchase = () => {
-        console.log("click");
+    const choosePurchase = (_id) => {
+        goto(`/purchase/${_id}`);
     }
 
     const purchaseBuyer = (users) => {
@@ -49,10 +48,10 @@
 {:else}
     <div class="columns is-centered is-multiline is-mobile is-variable is-8">
         {#each userPurchases as props, i}
-            <div class="column is-narrow">
-                
+            <div class="">
+
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="card" on:click={choosePurchase}>
+                <div class="card" on:click={choosePurchase(props.purchase.id)}>
                     <div class="card-image">
                         <figure class="image">
                             <img src={props.purchase.pizza.image_url} alt="Pizza">
@@ -60,11 +59,6 @@
                     </div>
                     <div class="card-content">
                         <div class="media">
-                        <!-- <div class="media-left">
-                            <figure class="image is-48x48">
-                                <img src={PapaJohnsLogo} alt="Papa Johns">
-                            </figure>
-                        </div> -->
                         <div class="media-content">
                             <p class="title is-4">{props.purchase.pizza.name}</p>
                             <p class="subtitle is-6">{props.purchase.pizza.description}</p>
@@ -74,10 +68,13 @@
                         <div class="content">
                             Comprador: {purchaseBuyer(props.purchase.users)}
                             <br>
-                            Mi cantidad de rebanadas: {props.slices}
+                            Mi cantidad de pedazos: {props.slices}
                             <br>
                             Cantidad de usuarios: {props.purchase.users.length}
+                            <br>
+                            Fecha: {new Date(props.purchase.date).toLocaleString('en-GB', { timeZone: 'UTC' })}
                         </div>
+                        <button class='button is-warning' >Más información</button>
                     </div>
                 </div>
 
@@ -87,11 +84,9 @@
 {/if}
 
 <style>
+
     .media-content {
-        overflow: hidden; /* Hide scrollbars */
-    }
-    .card {
-        border: black;
+        overflow: hidden;
     }
 
     .columns {
@@ -99,8 +94,8 @@
     }
 
     .loader {
-        border: 16px solid #f3f3f3; /* Light grey */
-        border-top: 16px solid hsl(48, 100%, 67%); /* Blue */
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid hsl(48, 100%, 67%);
         border-radius: 50%;
         width: 120px;
         height: 120px;
@@ -116,9 +111,12 @@
 
 
     .card {
-        width: 24rem;
+        max-width: 24rem;
+        height: 35rem;
         cursor: pointer;
         transition: all .2s ease-in-out; 
+        margin-right: 15px;
+        margin-left: 15px;
     }
 
     .card:hover {
