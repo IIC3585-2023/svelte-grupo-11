@@ -48,15 +48,16 @@
     border: none;
 }
 .wrapper{
-    width: 420px;
+    width: 380px;
     padding: 30px 20px;
     position: absolute;
     bottom: 50px;
     right: 0;
     overflow: hidden;
+    z-index: 1000;
 }
 #toast{
-    width: 380px;
+    width: 350px;
     height: 80px;
     padding: 20px;
     background-color: #ffffff;
