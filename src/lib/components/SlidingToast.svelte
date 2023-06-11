@@ -50,7 +50,7 @@
 .wrapper{
     width: 380px;
     padding: 30px 20px;
-    position: absolute;
+    position: sticky;
     bottom: 50px;
     right: 0;
     overflow: hidden;

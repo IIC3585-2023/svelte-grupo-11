@@ -66,7 +66,7 @@ const submitForm = async () => {
 
 </script>
 <!-- https://frontendshape.com/post/bulma-css-login-form-page-example -->
-<div class="hero is-fullheight">
+<div class="hero is-fullheight" id='HeroContainer'>
     <div class="hero-body is-justify-content-center is-align-items-center">
         <div class="columns is-flex is-flex-direction-column box form-container">
             <div class="column">
@@ -104,5 +104,9 @@ const submitForm = async () => {
         .form-container{
             width: 70%;
         }
+    }
+
+    #HeroContainer {
+        margin-top: -10%;
     }
 </style>

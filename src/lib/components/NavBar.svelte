@@ -9,6 +9,10 @@
         burgerToggle = !burgerToggle
     }
 
+    const hideDropdown = () => {
+        burgerToggle = false;
+    }
+
     $: menuActive = burgerToggle ? 'is-active' : '';
 
     const signout = () => {
@@ -16,6 +20,7 @@
         previous.loggedIn = false;
         previous.jwt = '';
         previous.user = '';
+        burgerToggle = false;
         goto('/')
         return previous;
     })};
@@ -41,17 +46,17 @@
     <div id="navbarBasicExample" class="navbar-menu {menuActive}">
         <div class="navbar-start">
         {#if $sessionStore.loggedIn}
-        <a href="/buy_pizza" class="navbar-item">
+        <a href="/buy_pizza" class="navbar-item" on:click={hideDropdown}>
             Pedir una Pizza
         </a>
         {/if}
         {#if $sessionStore.loggedIn}
-        <a href="/chat" class="navbar-item">
+        <a href="/chat" class="navbar-item" on:click={hideDropdown}>
             Chat
         </a>
         {/if}
         {#if $sessionStore.loggedIn}
-        <a href="/profile" class="navbar-item">
+        <a href="/profile" class="navbar-item" on:click={hideDropdown}>
             Mis pizzas
         </a>
         {/if}
@@ -61,10 +66,10 @@
         <div class="navbar-end">
         <div class="navbar-item">
             <div class="buttons">
-            <a href="/signup" class="button is-warning is-dark">
+            <a href="/signup" class="button is-warning is-dark" on:click={hideDropdown}>
                 <strong>Sign up</strong>
             </a>
-            <a href="/login" class="button is-warning">
+            <a href="/login" class="button is-warning" on:click={hideDropdown}>
                 Log in
             </a>
             </div>
@@ -74,7 +79,7 @@
             <div class="navbar-end">
                 <div class="navbar-item">
                     <div class="buttons">
-                    <a href="#top" class="button is-warning">
+                    <a href="#top" class="button is-warning not-clickable">
                         <strong>{$sessionStore.user.firstName +' ' +  $sessionStore.user.lastName}</strong>
                     </a>
                     <a href="#top" on:click={signout} class="button is-light">
@@ -106,5 +111,9 @@
 
     #PizzaLogo {
         padding-right: 6px;
+    }
+
+    .not-clickable {
+        cursor: default;
     }
 </style>

@@ -62,6 +62,9 @@ if ("serviceWorker" in navigator) {
         notificationToken.token = token;
 
         onMessage(messaging, (payload) => {
+          if (!get(sessionStore).loggedIn) {
+            return;
+          }
           const notificationRef = get(notificationStore); 
           notificationRef.showNotification = true;
           notificationStore.set(notificationRef);
