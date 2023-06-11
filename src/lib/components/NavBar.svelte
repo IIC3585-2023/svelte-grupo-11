@@ -48,6 +48,11 @@
             Chat
         </a>
         {/if}
+        {#if $sessionStore.loggedIn}
+        <a href="/profile" class="navbar-item">
+            Mis pizzas
+        </a>
+        {/if}
         </div>
         {#if !$sessionStore.loggedIn}
 
