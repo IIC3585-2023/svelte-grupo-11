@@ -2,6 +2,7 @@
     import {sessionStore} from '../stores/sessionStore'
     import { API_URL } from '../global';
     import { onMount } from "svelte";
+    import { goto } from '$app/navigation';
 
     let userPurchases = [];
 
@@ -21,7 +22,7 @@
         });
 
         if(resMyPurchases.status != 200){
-            throw redirect(401, '/');
+            goto('/');
         }
 
         userPurchases = (await resMyPurchases.json()).purchases;
