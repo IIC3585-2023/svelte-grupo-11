@@ -72,7 +72,7 @@ const submitForm = async () => {
 
 </script>
 <!-- https://frontendshape.com/post/bulma-css-login-form-page-example -->
-<div class="hero is-fullheight">
+<div class="hero is-fullheight" id='HeroContainer'>
     <div class="hero-body is-justify-content-center is-align-items-center">
         <div class="columns is-flex is-flex-direction-column box form-container">
             <div class="column">
@@ -106,7 +106,7 @@ const submitForm = async () => {
                 <button class="button is-warning is-fullwidth {loadingButton ? 'is-loading' : ''}" type="submit" on:click={submitForm} disabled={!validated}>SignUp</button>
             </div>
             <div class="has-text-centered">
-                <p class="is-size-7"> Already have an account? <button href="/login" class="has-text-primary">Login</button>
+                <p class="is-size-7"> Already have an account? <a href="/login" class="has-text-primary">Login</a>
                 </p>
             </div>
         </div>
@@ -118,5 +118,9 @@ const submitForm = async () => {
         .form-container{
             width: 70%;
         }
+    }
+
+    #HeroContainer {
+        margin-top: -5%;
     }
 </style>

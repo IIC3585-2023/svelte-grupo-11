@@ -4,6 +4,6 @@
 </script>
 
 <NavBar/>
-<SlidingToast></SlidingToast>
 
 <slot></slot>
+<SlidingToast></SlidingToast>
