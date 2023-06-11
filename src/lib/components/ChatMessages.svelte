@@ -28,12 +28,21 @@ const sendMessage = () => {
   socket.send(message);
 }
 
+const sendInitMessage = () => {
+  const message = JSON.stringify({
+    jwt: $sessionStore.jwt,
+    type: "init"
+  });
+  socket.send(message);
+}
+
 const openWebsocket = async () => {
   const API_URL = 'wss://backend-svelte.onrender.com';
   const socket_ = new WebSocket(API_URL + '/websocket/messaging_websocket');
 
   socket_.addEventListener("open", (event) => {
     console.log("Socket opened");
+    sendInitMessage();
     socket = socket_;
     socketActive = true;
   });
