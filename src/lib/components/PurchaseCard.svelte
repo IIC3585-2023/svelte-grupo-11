@@ -8,6 +8,7 @@
     export let purchaseDate;
     export let users;
     export let pizzeria;
+    export let hideButton = false;
 
     const date = new Date(purchaseDate);
     const dateOptions = {
@@ -104,7 +105,9 @@
     {#if $sessionStore.loggedIn}
         {#if !clickedJoin}
             <br><br>
-            <button class='button is-warning' on:click={clickJoin}>Unirse a la compra</button>
+            {#if  !hideButton}
+                <button class='button is-warning' on:click={clickJoin}>Unirse a la compra</button>
+            {/if}
             <br>
         {:else}
             <div class='field'>
