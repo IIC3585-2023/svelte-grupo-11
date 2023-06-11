@@ -43,9 +43,6 @@
             Pedir una Pizza
         </a>
         {/if}
-        <a href="/current_pizzas" class="navbar-item">
-            Pizzas actuales
-        </a>
         {#if $sessionStore.loggedIn}
         <a href="/chat" class="navbar-item">
             Chat
