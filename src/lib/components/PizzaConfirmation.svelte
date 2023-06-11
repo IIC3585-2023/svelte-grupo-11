@@ -28,19 +28,19 @@
     }
 
     const buyPizza = async () => {
-        console.log('Bought Pizza');
-        console.log(`Slices: ${slices}`);
-        console.log(`chosenDate: ${chosenDate}:00-04`);
+        // console.log('Bought Pizza');
+        // console.log(`Slices: ${slices}`);
+        // console.log(`chosenDate: ${chosenDate}:00-04`);
 
         if (!validateSlices(slices)) {
-            console.log('Slices are invalid!')
+            // console.log('Slices are invalid!')
             errorMsg = 'Cantidad de pedazos debe estar entre 1 y 7'
             formErrors = true;
             return;
         }
 
         if (!validateDate(chosenDate)) {
-            console.log('Invalid Date!')
+            // console.log('Invalid Date!')
             errorMsg = 'La fecha no puede ser vacia'
             formErrors = true;
             return;
