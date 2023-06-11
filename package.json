@@ -16,6 +16,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@macfja/svelte-persistent-store": "^2.3.0",
 		"firebase": "^9.22.2"
 	}
 }
