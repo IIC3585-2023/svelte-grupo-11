@@ -1,6 +1,7 @@
 <script>
     import PizzaIcon from '$lib/assets/pizza.png'
     import {sessionStore} from '../stores/sessionStore';
+    import { goto } from '$app/navigation';
 
     let burgerToggle = false
 
@@ -15,6 +16,7 @@
         previous.loggedIn = false;
         previous.jwt = '';
         previous.user = '';
+        goto('/')
         return previous;
     })};
 
