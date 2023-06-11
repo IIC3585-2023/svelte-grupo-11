@@ -42,9 +42,9 @@ const openWebsocket = async () => {
 
   socket_.addEventListener("open", (event) => {
     console.log("Socket opened");
-    sendInitMessage();
     socket = socket_;
     socketActive = true;
+    sendInitMessage();
   });
 
   socket_.addEventListener("message", (event) => {
@@ -92,9 +92,17 @@ const closeWebsocket = async () => {
   }
 }
 
-onMount(() => {
-  openWebsocket();
-})
+const handleSocket = () => {
+  if($sessionStore.loggedIn && !socketActive){
+    openWebsocket();
+  }
+
+  if(!$sessionStore.loggedIn && socketActive){
+    closeWebsocket();
+  }
+}
+
+$: $sessionStore, handleSocket();
 
 onDestroy(() => {
   closeWebsocket();
