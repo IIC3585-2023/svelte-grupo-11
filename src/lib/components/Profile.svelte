@@ -24,7 +24,6 @@
         }
 
         userPurchases = (await resMyPurchases.json()).purchases;
-        console.log(userPurchases)
         
         loading = false;
     });
@@ -49,8 +48,8 @@
 {:else}
     <div class="columns is-centered is-multiline is-mobile is-variable is-8">
         {#each userPurchases as props, i}
-            <div class="column is-narrow">
-                
+            <div class="">
+
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
                 <div class="card" on:click={choosePurchase(props.purchase.id)}>
                     <div class="card-image">
@@ -85,11 +84,9 @@
 {/if}
 
 <style>
+
     .media-content {
-        overflow: hidden; /* Hide scrollbars */
-    }
-    .card {
-        border: black;
+        overflow: hidden;
     }
 
     .columns {
@@ -97,8 +94,8 @@
     }
 
     .loader {
-        border: 16px solid #f3f3f3; /* Light grey */
-        border-top: 16px solid hsl(48, 100%, 67%); /* Blue */
+        border: 16px solid #f3f3f3;
+        border-top: 16px solid hsl(48, 100%, 67%);
         border-radius: 50%;
         width: 120px;
         height: 120px;
@@ -114,10 +111,12 @@
 
 
     .card {
-        width: 24rem;
+        max-width: 24rem;
         height: 35rem;
         cursor: pointer;
         transition: all .2s ease-in-out; 
+        margin-right: 15px;
+        margin-left: 15px;
     }
 
     .card:hover {

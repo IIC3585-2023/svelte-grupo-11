@@ -6,32 +6,30 @@
     import { onMount } from "svelte";
     import { API_URL } from '$lib/global';
     import PurchaseCard from "$lib/components/PurchaseCard.svelte";
+    
+    import { goto } from "$app/navigation";
 
     let loading = true;
-    let purchase = {};
-    let reformatedPurchase = {}
+    let reformatedPurchase = null
+    let hideButton = true;
 
     onMount(async () => {
         const URL = API_URL + `/purchases/${data.purchaseId}`;
         const token = $sessionStore.jwt;
 
-        const resMyPurchases = await fetch(URL, {
+        const res = await fetch(URL, {
             method: 'GET',
             headers: {
             'Authorization': `Bearer ${token}`
             }
         });
-
-        console.log(URL)
-        if(resMyPurchases.status != 200){
+        if(res.status != 200){
             goto('/');
         }
-        purchase = (await resMyPurchases.json()).purchase;
         
-        const item = purchase;
-        console.log(item)
+        const item = (await res.json()).purchase;
         const formattedPizza = {
-            id: item.pizza_id,
+            id: item.pizza.id,
             name: item.pizza.name,
             description: item.pizza.description,
             cost: item.pizza.cost,
@@ -55,29 +53,80 @@
             users: item.users,
             pizzeria: formattedPizzeria,
         }
-        console.log(purchase)
         
         loading = false;
     });
 
+    const goBack = () => {
+        goto('/profile')
+    }
+
 
 </script>
 
-
-{#if purchase !== {}}
-<div class="container" id="PurchasesContainer">
-    <div class="columns is-multiline">
-        <div class="column is-one-third-widescreen is-half-tablet">
-            <!-- <PurchaseCard {...purchase}/> -->
-        </div>
-    </div>
-</div>
+{#if loading}
+    <br>
+    <br>
+    <div class="loader"></div>
 {:else}
-<div class="hero">
-<div class="hero-body">
-    <div class="container has-text-centered">
-        <p class="title">No se encontraron compras actuales</p>
-    </div>
-</div>
-</div>
+    {#if reformatedPurchase !== null}
+        <div class="container" id="PurchasesContainer">
+            <div class="columns is-multiline">
+                <div class="column is-center">
+                    <div class="item">
+                      <PurchaseCard {...reformatedPurchase} {hideButton}/>
+                      <br>
+                      <button id="backButton" class='button is-warning has-text-centered' on:click={goBack}>Atrás</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {:else}
+        <div class="hero">
+            <div class="hero-body">
+                <div class="container has-text-centered">
+                    <p class="title">No se encontraron compras actuales</p>
+                </div>
+            </div>
+        </div>
+    {/if}
 {/if}
+
+    
+<style>
+    @media (max-width: 0px) {
+        #PurchasesContainer {
+            max-width: 1rem;
+            margin-right: 15px;
+            margin-left: 15px;
+        }
+    }
+    .item {
+        max-width: 60rem;
+        align-content: center;
+        align-items: center;
+        margin: auto;
+    }
+
+
+    .loader {
+        border: 16px solid #f3f3f3; /* Light grey */
+        border-top: 16px solid hsl(48, 100%, 67%); /* Blue */
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        animation: spin 2s linear infinite;
+        margin-left: auto;
+        margin-right: auto;
+        /* position: absolute; */
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    #backButton {
+        display:block
+    }
+</style>
