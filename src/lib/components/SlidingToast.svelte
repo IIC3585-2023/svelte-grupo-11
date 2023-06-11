@@ -23,7 +23,7 @@
 
 </script>
 
-<div class="wrapper">
+<div class="wrapper" style="{open ? 'z-index: 1000;' : 'z-index: -1;'}">
     <div id="toast" style="{open ? 'transform: translate(0px);' : 'transform: translate(400px);'}">
         <div class="container-1">
             <i class="fas fa-check-square"></i>
@@ -54,7 +54,7 @@
     bottom: 50px;
     right: 0;
     overflow: hidden;
-    z-index: 1000;
+    /* z-index: 1000; */
 }
 #toast{
     width: 350px;

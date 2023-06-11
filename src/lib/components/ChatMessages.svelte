@@ -1,15 +1,98 @@
 <script>
 import {messagingStore} from '../../lib/stores/messagingStore';
 import {sessionStore} from '../stores/sessionStore'
-import { API_URL } from '../global';
+import { onMount, onDestroy } from 'svelte';
 let inputText = ''
 
 let messages = [];
 
 const currentUserID = $sessionStore.user.id;
 
+let socketActive = false;
+let socket = null;
+
+const sendMessage = () => {
+  const message = JSON.stringify({
+    jwt: $sessionStore.jwt,
+    text: inputText,
+    receiver_id: $messagingStore.selectedUser.id
+  });
+  const currTime = new Date()
+  messages.push({
+    text: inputText,
+    time: `${currTime.getHours()}:${currTime.getMinutes()}:${currTime.getSeconds()}`,
+    sender_id: currentUserID
+  })
+  messages = messages
+  inputText = '';
+  socket.send(message);
+}
+
+const openWebsocket = async () => {
+  const API_URL = 'wss://backend-svelte.onrender.com';
+  const socket_ = new WebSocket(API_URL + '/websocket/messaging_websocket');
+
+  socket_.addEventListener("open", (event) => {
+    console.log("Socket opened");
+    socket = socket_;
+    socketActive = true;
+  });
+
+  socket_.addEventListener("message", (event) => {
+    console.log("Message from server ", event.data);
+    const message = JSON.parse(event.data);
+    const messageType = message.status;
+    if(messageType != "newMessage"){
+      console.log("Message from server (not user message):", message);
+      return;
+    }
+    const sender_id = message.sender_id;
+    const text = message.message;
+
+    if(sender_id == $messagingStore.selectedUser.id){
+        const currTime = new Date().toLocaleString()
+        const messageObj = {
+          time: currTime,
+          text: text,
+          sender_id: sender_id
+        }
+        messages.push(messageObj);
+        messages = messages;
+
+    }
+
+  });
+
+  socket_.addEventListener("error", (event) => {
+    console.log("Error in socket", event);
+  });
+
+
+  socket_.addEventListener("close", (event) => {
+    console.log("Socket closed :(");
+    socket = null;
+    socketActive = false;
+  });
+}
+
+const closeWebsocket = async () => {
+  if(socket){
+    socket.close();
+    socket = null;
+    socketActive = false;
+  }
+}
+
+onMount(() => {
+  openWebsocket();
+})
+
+onDestroy(() => {
+  closeWebsocket();
+})
+
 const getMessages = async () => {
-  console.log($messagingStore)
+  const API_URL = 'https://backend-svelte.onrender.com';
   if($messagingStore.selectedUser == false || !$messagingStore.selectedUser) return;
   const userID = $messagingStore.selectedUser.id;
 
@@ -67,7 +150,7 @@ $: $messagingStore, getMessages();
         <input class="input" type="text" bind:value={inputText} placeholder="Message">
     </div>
     <div class="column">
-        <button class="button is-info is-rounded">Enviar</button>
+        <button class="button is-info is-rounded" disabled={!socketActive || !$messagingStore.userSelected} on:click={sendMessage}>Enviar</button>
     </div>
 </div>
 
