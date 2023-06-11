@@ -9,8 +9,6 @@
     let loading = true;
 
     onMount(async () => {
-        // TODO CHECK IF LOGGED IN
-
         const URL = API_URL + `/purchases/my_purchases`;
         const token = $sessionStore.jwt;
 
@@ -26,12 +24,13 @@
         }
 
         userPurchases = (await resMyPurchases.json()).purchases;
+        console.log(userPurchases)
         
         loading = false;
     });
 
-    const choosePurchase = () => {
-        console.log("click");
+    const choosePurchase = (_id) => {
+        goto(`/purchase/${_id}`);
     }
 
     const purchaseBuyer = (users) => {
@@ -53,7 +52,7 @@
             <div class="column is-narrow">
                 
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="card" on:click={choosePurchase}>
+                <div class="card" on:click={choosePurchase(props.purchase.id)}>
                     <div class="card-image">
                         <figure class="image">
                             <img src={props.purchase.pizza.image_url} alt="Pizza">
@@ -61,11 +60,6 @@
                     </div>
                     <div class="card-content">
                         <div class="media">
-                        <!-- <div class="media-left">
-                            <figure class="image is-48x48">
-                                <img src={PapaJohnsLogo} alt="Papa Johns">
-                            </figure>
-                        </div> -->
                         <div class="media-content">
                             <p class="title is-4">{props.purchase.pizza.name}</p>
                             <p class="subtitle is-6">{props.purchase.pizza.description}</p>
@@ -75,10 +69,13 @@
                         <div class="content">
                             Comprador: {purchaseBuyer(props.purchase.users)}
                             <br>
-                            Mi cantidad de rebanadas: {props.slices}
+                            Mi cantidad de pedazos: {props.slices}
                             <br>
                             Cantidad de usuarios: {props.purchase.users.length}
+                            <br>
+                            Fecha: {new Date(props.purchase.date).toLocaleString('en-GB', { timeZone: 'UTC' })}
                         </div>
+                        <button class='button is-warning' >Más información</button>
                     </div>
                 </div>
 
@@ -118,6 +115,7 @@
 
     .card {
         width: 24rem;
+        height: 35rem;
         cursor: pointer;
         transition: all .2s ease-in-out; 
     }
