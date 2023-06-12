@@ -12,6 +12,7 @@
     let loading = true;
     let reformatedPurchase = null
     let hideButton = true;
+    const hideChatButton = false;
 
     onMount(async () => {
         const URL = API_URL + `/purchases/${data.purchaseId}`;
@@ -74,7 +75,7 @@
             <div class="columns is-multiline">
                 <div class="column is-center">
                     <div class="item">
-                      <PurchaseCard {...reformatedPurchase} {hideButton}/>
+                      <PurchaseCard {...reformatedPurchase} {hideButton} {hideChatButton}/>
                       <br>
                       <button id="backButton" class='button is-warning has-text-centered' on:click={goBack}>Atrás</button>
                     </div>

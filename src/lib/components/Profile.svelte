@@ -46,40 +46,42 @@
 {#if loading}
     <div class="loader"></div>
 {:else}
-    <div class="columns is-centered is-multiline is-mobile is-variable is-8">
-        {#each userPurchases as props, i}
-            <div class="">
-
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <div class="card" on:click={choosePurchase(props.purchase.id)}>
-                    <div class="card-image">
-                        <figure class="image">
-                            <img src={props.purchase.pizza.image_url} alt="Pizza">
-                        </figure>
-                    </div>
-                    <div class="card-content">
-                        <div class="media">
-                        <div class="media-content">
-                            <p class="title is-4">{props.purchase.pizza.name}</p>
-                            <p class="subtitle is-6">{props.purchase.pizza.description}</p>
+    <!-- <div class="columns is-centered is-multiline is-mobile is-variable is-8"> -->
+    <div class="container" id="PurchasesContainer">
+        <div class="columns is-multiline">
+            {#each userPurchases as props, i}
+                <div class="column is-one-third-widescreen is-half-tablet">
+                    <div class='box is-flex is-flex-direction-column'>
+                        <div class="card-image">
+                            <figure class="image">
+                                <figure class="image is-2by1">
+                                    <img src={props.purchase.pizza.image_url} alt="Pizza" id='PizzaImg'>
+                                </figure>
+                            </figure>
                         </div>
+                        <div class="card-content">
+                            <div class="media">
+                            <div class="media-content">
+                                <p class="title is-4">{props.purchase.pizza.name}</p>
+                                <p class="subtitle is-6">{props.purchase.pizza.description}</p>
+                            </div>
+                            </div>
+                            
+                            <div class="content">
+                                Comprador: {purchaseBuyer(props.purchase.users)}
+                                <br>
+                                Mi cantidad de pedazos: {props.slices}
+                                <br>
+                                Cantidad de usuarios: {props.purchase.users.length}
+                                <br>
+                                Fecha: {new Date(props.purchase.date).toLocaleString('en-GB', { timeZone: 'UTC' })}
+                            </div>
+                            <button class='button is-warning' on:click={choosePurchase(props.purchase.id)}>Más información</button>
                         </div>
-                        
-                        <div class="content">
-                            Comprador: {purchaseBuyer(props.purchase.users)}
-                            <br>
-                            Mi cantidad de pedazos: {props.slices}
-                            <br>
-                            Cantidad de usuarios: {props.purchase.users.length}
-                            <br>
-                            Fecha: {new Date(props.purchase.date).toLocaleString('en-GB', { timeZone: 'UTC' })}
-                        </div>
-                        <button class='button is-warning' >Más información</button>
                     </div>
                 </div>
-
-            </div>
-        {/each}
+            {/each}
+        </div>
     </div>
 {/if}
 
@@ -88,6 +90,18 @@
     .media-content {
         overflow: hidden;
     }
+
+    #PizzaImg {
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+    /* @media (max-width: 1024px) {
+        #PurchasesContainer {
+            margin-right: 15px;
+            margin-left: 15px;
+        }
+    } */
 
     .columns {
         margin: 0;
@@ -117,6 +131,7 @@
         transition: all .2s ease-in-out; 
         margin-right: 15px;
         margin-left: 15px;
+        margin-bottom: 15px;
     }
 
     .card:hover {
