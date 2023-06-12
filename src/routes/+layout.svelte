@@ -6,4 +6,4 @@
 <NavBar/>
 
 <slot></slot>
-<SlidingToast></SlidingToast>
+<!-- <SlidingToast></SlidingToast> -->

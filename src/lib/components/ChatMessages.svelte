@@ -2,16 +2,37 @@
 import {messagingStore} from '../../lib/stores/messagingStore';
 import {sessionStore} from '../stores/sessionStore'
 import { onMount, onDestroy } from 'svelte';
-let inputText = ''
+	import { afterUpdate, tick } from 'svelte';
 
+let inputText = ''
 let messages = [];
 
 const currentUserID = $sessionStore.user.id;
 
 let socketActive = false;
 let socket = null;
+let loading = true;
+
+let element;
+
+afterUpdate(() => {
+  if(messages) scrollToBottom(element);
+});
+	
+$: if(messages && element) {
+  scrollToBottom(element);
+}
+const scrollToBottom = async (node) => {
+  if (node !== undefined){
+    node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
+  }
+}; 
 
 const sendMessage = () => {
+  if (inputText === "") {
+    return;
+  }
+  
   const message = JSON.stringify({
     jwt: $sessionStore.jwt,
     text: inputText,
@@ -140,43 +161,60 @@ const getMessages = async () => {
     message.time = date.toLocaleTimeString('en-US');
     messages.push(message)
   };
+
+  loading = false;
 };
 $: $messagingStore, getMessages();
 
-</script>
-<div class="box" style="height: 90%; overflow-y:scroll">
-  {#each messages as message, i}
-    {#if message.sender_id == currentUserID}
-      <div class="container">
-        <img src="../src/lib/assets/user-icon.png" alt="Avatar">
-        <p>{message.text}</p>
-        <span class="time-right">{ message.time }</span>
-      </div>
-    {:else}
-      <div class="container darker">
-        <img src="../src/lib/assets/user-icon.png" alt="Avatar" class="right">
-        <p>{message.text}</p>
-        <span class="time-left">{ message.time }</span>
-      </div>
-    {/if}
-  {/each}
-</div>
+const sendMessageEnterKey = async (event) => {
+  if (event.key === 'Enter') {
+    sendMessage()
+  }
+}
 
-<div class="columns">
-    <div class="column is-four-fifths message-input">
-        <input class="input" type="text" bind:value={inputText} placeholder="Message">
-    </div>
-    <div class="column">
-        <button class="button is-info is-rounded" disabled={!socketActive || !$messagingStore.userSelected} on:click={sendMessage}>Enviar</button>
-    </div>
+</script>
+
+
+{#if loading}
+  <div class="loader"></div>
+{:else}
+<div>
+  
 </div>
+  <div bind:this={element} class="box" style="height: 55vh; overflow-y:scroll; overflow: auto;" >
+    {#each messages as message, i}
+      {#if message.sender_id == currentUserID}
+        <div class="container">
+          <img src="../src/lib/assets/user-icon.png" alt="Avatar">
+          <p class="time-left">{message.text}</p>
+          <span class="time-right">{ message.time }</span>
+        </div>
+      {:else}
+        <div class="container darker">
+          <img src="../src/lib/assets/user-icon.png" alt="Avatar" class="right">
+          <p>{message.text}</p>
+          <span class="time-left">{ message.time }</span>
+        </div>
+      {/if}
+    {/each}
+  </div>
+
+  <div class="rows">
+      <div class="row is-four-fifths message-input">
+          <input class="input" type="text" bind:value={inputText} placeholder="Message" on:keypress={sendMessageEnterKey}>
+          <br>
+          <br>
+          <button class="button is-info is-rounded" disabled={!socketActive || !$messagingStore.userSelected} on:click={sendMessage}>Enviar</button>
+      </div>
+  </div>
+{/if}
 
 
 <style>
 /* Chat containers */
 
 .message-input {
-    width: 90%;
+    width: 100%;
 }
 
 .container {
@@ -185,6 +223,17 @@ $: $messagingStore, getMessages();
   border-radius: 5px;
   padding: 10px;
   margin: 10px 0;
+}
+
+.container span {
+  font-size: large;
+}
+
+.container p {
+  font-size: large;
+  font-weight: bolder;
+  margin-left: 5%;
+  color: black;
 }
 
 /* Darker chat container */
@@ -226,5 +275,21 @@ $: $messagingStore, getMessages();
 .time-left {
   float: left;
   color: #999;
+}
+
+.loader {
+    border: 16px solid #f3f3f3;
+    border-top: 16px solid hsl(48, 100%, 67%);
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 </style>
