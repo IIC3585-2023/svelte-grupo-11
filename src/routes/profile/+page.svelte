@@ -16,4 +16,8 @@
 
 <Profile/>
 
-<style></style>
+<style>
+    #HeroTitle {
+        font-size: 70px;
+    }
+</style>

@@ -1,6 +1,7 @@
 <script>
     import { sessionStore } from "$lib/stores/sessionStore.js"
-  import { API_URL } from "../global";
+    import { API_URL } from "../global";
+    import { goto } from "$app/navigation";
 
     export let id;
     export let remainingSlices;
@@ -9,6 +10,7 @@
     export let users;
     export let pizzeria;
     export let hideButton = false;
+    export let hideChatButton = true;
 
     const date = new Date(purchaseDate);
     const dateOptions = {
@@ -79,6 +81,27 @@
             console.log(response);
         }
     }
+
+    const goToChat = async (receiver_id) => {
+        const URL = API_URL + `/messages`;
+        const token = $sessionStore.jwt;
+        const body = {
+            "text": "Hola! Estoy interesado de compartir una pizza.",
+            "receiver_id": receiver_id
+        }
+
+        const res = await fetch(URL, {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(body)
+        });
+        
+        goto('/chat');
+    }
+
 </script>
 
 
@@ -101,6 +124,12 @@
         <p class='title'>{remainingSlices} {remainingSlices === 1 ? "pedazo restante" : "pedazos restantes"}</p>
         <p>Programada para el {parsedDate}</p>
         <p>Comprada por {buyer.firstName} {buyer.lastName}</p>
+        
+        {#if buyer.id !== $sessionStore.user.id}
+            {#if !hideChatButton}
+                <button id="chatButton" class='button is-warning has-text-centered' on:click={goToChat(buyer.id)}>Hablar con comprador</button>
+            {/if}
+        {/if}
     </div>
     {#if $sessionStore.loggedIn}
         {#if !clickedJoin}
