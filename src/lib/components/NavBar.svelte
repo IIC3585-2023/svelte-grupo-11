@@ -116,4 +116,31 @@
     .not-clickable {
         cursor: default;
     }
+
+    .navbar-menu {
+        background-color: #FFE08A;
+    }
+
+@media only screen and (max-width: 1000px) {
+  .navbar-menu {
+      display: block;
+      opacity: 0;
+      position: relative;
+      padding: 0;
+      left: 0;
+      right: 0;
+      max-height: 0px;
+      transition: all 0.25s ease-in-out;
+      pointer-events: none;
+      overflow: hidden;
+  }
+
+  .navbar-menu.is-active {
+    max-height: 200px;
+    padding: .5rem .75rem;
+      opacity: 1;
+      transform: none;
+      pointer-events: auto;
+  }
+}
 </style>
